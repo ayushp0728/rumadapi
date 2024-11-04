@@ -8,12 +8,14 @@ const supabase = createClient(process.env.SUPABASE_DOMAIN, process.env.SUPABASE_
 
 async function getStudyResources() {
     const {data, error} = await supabase.from('studyResources').select('*')
+    console.log(data)
     if (error) {
         console.log(error)
     } else {
         return data
     }
 }
+getStudyResources()
 
 // Login() function with username and password
 
