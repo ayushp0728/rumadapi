@@ -15,7 +15,19 @@ async function getStudyResources() {
         return data
     }
 }
-getStudyResources()
+
+async function addStudyResource() {
+    let studyReource = {
+        subject: subject_,
+        title: title_,
+        description: description_,
+        url: url_
+    }
+    const {data, error} = await supabase.from('studyResources').insert(studyResource)
+    if (error) {
+        console.log("could not add resource", error)
+    }
+}
 
 // Login() function with username and password
 
