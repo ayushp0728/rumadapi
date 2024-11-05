@@ -18,8 +18,9 @@ async function getStudyResources() {
 }
 
 async function addStudyResource(subject_, title_, description_, url_, created_by_) {
+    const randomId = Math.floor(Math.random() * 90 + 10);
     let studyResource = {
-        id: randomUUID4(),  
+        id: randomId,  
         subject: subject_,
         title: title_,
         description: description_,

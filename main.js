@@ -144,7 +144,6 @@ app.post('/add-resource/post', async(req, res) => {
     let subject_ = req.body.subject;
     let title_ = req.body.title;
     let description_ = req.body.description;
-    let type_ = req.body.type;
     let url_ = req.body.url;
     let created_by_ = req.body.created_by;
     
