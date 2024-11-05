@@ -160,13 +160,7 @@ app.get('/study-resources', async (req, res) => {
 
 // Logout
 app.get('/logout', async (req,res) => {
-    try {
-        await logout()
-        const data = await getStudyResources()
-        res.send(data)
-    } catch (error) {
-        console.log(error)
-    }
+    res.redirect('/');
 })
 
 app.listen(port, () => {

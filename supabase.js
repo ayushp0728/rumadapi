@@ -83,10 +83,7 @@ async function login(username_, password_) {
 
 // Logout() function
 async function logout() {
-    const {error} = await supabase.auth.signOut()
-    if (error) {
-        console.log(error)
-    }
+    
 }
 
 // Export functions to main.js
