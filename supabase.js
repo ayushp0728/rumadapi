@@ -93,4 +93,4 @@ async function logout() {
 }
 
 // Export functions to main.js
-module.exports = {getStudyResources, login, logout}
+module.exports = {getStudyResources, addStudyResource, login, logout}
