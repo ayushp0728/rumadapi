@@ -150,6 +150,7 @@ app.post('/add-resource/post', async(req, res) => {
     try{
         await addStudyResource(subject_, title_, description_, type_, url_, created_by_);
         res.send('Study Resource Added!');
+        res.send(`<button onclick="window.location.href='/study-resources'">Return Home</button>`)
     }catch (error){
         console.log(error);
     }
@@ -162,6 +163,7 @@ app.get('/study-resources', async (req, res) => {
         const resources = await getStudyResources();
         res.send(`
             <h1>Study Resources</h1>
+            <button onclick="window.location.href='/add-resource'">Add Resource</button>
             ${resources.map(resource => `
                 <div>
                     <h3>${resource.title || 'Untitled'}</h3>
