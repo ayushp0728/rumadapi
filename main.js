@@ -148,7 +148,7 @@ app.post('/add-resource/post', async(req, res) => {
     let created_by_ = req.body.created_by;
     
     try{
-        await addStudyResource(subject_, title_, description_, type_, url_, created_by_);
+        await addStudyResource(subject_, title_, description_, url_, created_by_);
         res.send('Study Resource Added!');
         res.send(`<button onclick="window.location.href='/study-resources'">Return Home</button>`)
     }catch (error){
