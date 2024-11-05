@@ -1,4 +1,5 @@
 const { createClient } = require('@supabase/supabase-js')
+const { randomUUID4 } = require('crypto');
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -16,12 +17,14 @@ async function getStudyResources() {
     }
 }
 
-async function addStudyResource(subject_, title_, description_, type_, url_) {
+async function addStudyResource(subject_, title_, description_, url_, created_by_) {
     let studyResource = {
+        id: randomUUID4(),  
         subject: subject_,
         title: title_,
         description: description_,
-        url: url_
+        url: url_,
+        created_by: created_by_
     }
     const {data, error} = await supabase.from('studyResources').insert(studyResource)
     if (error) {
@@ -83,6 +86,16 @@ async function login(username_, password_) {
     }
 }
 
+async function updateUserFavorite(resourceId) {
+    const { data, error } = await supabase
+        .from('userdata')
+        .update({ favorite_resource: resourceId })
+        .eq('username', username); 
+
+    if (error) throw error;
+    return true;
+}
+
 // Logout() function
 async function logout() {
     const { error } = await supabase.auth.signOut()
@@ -92,4 +105,5 @@ async function logout() {
 }
 
 // Export functions to main.js
-module.exports = {getStudyResources, addStudyResource, login, logout}
+module.exports = {getStudyResources, addStudyResource, login, logout, updateUserFavorite}
+

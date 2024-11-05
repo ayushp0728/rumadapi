@@ -71,38 +71,37 @@ app.get('/login', (req, res) => {
             </form>
 
             <script>
-                function handleLogin() {
-                    const username = document.getElementById('username').value;
-                    const password = document.getElementById('password').value;
-                    
-                    console.log('Sending:', { username, password });  // Debug log
-
-                    fetch('/login/post', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ 
-                            username: username, 
-                            password: password 
-                        })
+            function handleLogin() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                fetch('/login/post', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        username: username, 
+                        password: password 
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Response:', data);  // Debug log
-                        if (data.success) {
-                            alert('Login successful!');
-                            window.location.href = '/study-resources';
-                        } else {
-                            alert('Login failed: ' + data.error);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error during login: ' + error);
-                    });
-                }
-            </script>
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Store username in localStorage when login is successful
+                        localStorage.setItem('currentUser', username);
+                        alert('Login successful!');
+                        window.location.href = '/study-resources';
+                    } else {
+                        alert('Login failed: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error during login: ' + error);
+                });
+            }
+        </script>
         </body>
         </html>
     `);
@@ -147,9 +146,10 @@ app.post('/add-resource/post', async(req, res) => {
     let description_ = req.body.description;
     let type_ = req.body.type;
     let url_ = req.body.url;
+    let created_by_ = req.body.created_by;
     
     try{
-        await addStudyResource(subject_, title_, description_, type_, url_);
+        await addStudyResource(subject_, title_, description_, type_, url_, created_by_);
         res.send('Study Resource Added!');
     }catch (error){
         console.log(error);
@@ -168,18 +168,20 @@ app.get('/study-resources', async (req, res) => {
                     <h3>${resource.title || 'Untitled'}</h3>
                     <p>${resource.description || 'No description'}</p>
                     <p>Subject: ${resource.subject || 'N/A'}</p>
-                    <p>Type: ${resource.type || 'N/A'}</p>
                     <a href="${resource.url || '#'}">View Resource</a>
+                    <p>Created By: ${resource.created_by || 'N/A'}</p>
                     <hr>
                 </div>
             `).join('')}
             <br>
             <button onclick="window.location.href='/logout'">Logout</button>
+                
         `);
     } catch (error) {
         res.status(500).send('Error loading study resources: ' + error.message);
     }
 });
+
 
 // Logout
 app.get('/logout', async (req, res) => {
