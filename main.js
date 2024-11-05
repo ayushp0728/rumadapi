@@ -3,11 +3,12 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
-app.use(express.urlencoded({ extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const {logout, login} = require('./supabase');
+const { logout, login } = require('./supabase');
 const { getStudyResources } = require('./supabase');
+const { addStudyResource } = require('./supabase');
 
 app.get('/', (req, res) => {
     res.send(`
@@ -110,9 +111,9 @@ app.get('/login', (req, res) => {
 // Update the login endpoint
 app.post('/login/post', async (req, res) => {
     console.log('Received login request:', req.body);  // Debug log
-    
+
     const { username, password } = req.body;
-    
+
     if (!username || !password) {
         return res.status(400).json({
             success: false,
@@ -133,6 +134,28 @@ app.post('/login/post', async (req, res) => {
         });
     }
 });
+
+// Add resources page
+
+app.get('/add-resource', async (req, res) => {
+    res.sendFile(path.join(__dirname, 'add-resource.html'))
+})
+
+app.post('/add-resource/post', async(req, res) => {
+    let subject_ = req.body.subject;
+    let title_ = req.body.title;
+    let description_ = req.body.description;
+    let type_ = req.body.type;
+    let url_ = req.body.url;
+    
+    try{
+        await addStudyResource(subject_, title_, description_, type_, url_);
+        res.send('Study Resource Added!');
+    }catch (error){
+        console.log(error);
+    }
+
+})
 
 // Add a route for the study resources page (where users are redirected after login)
 app.get('/study-resources', async (req, res) => {
@@ -159,7 +182,7 @@ app.get('/study-resources', async (req, res) => {
 });
 
 // Logout
-app.get('/logout', async (req,res) => {
+app.get('/logout', async (req, res) => {
     res.redirect('/');
 })
 

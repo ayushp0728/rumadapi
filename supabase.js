@@ -16,16 +16,19 @@ async function getStudyResources() {
     }
 }
 
-async function addStudyResource() {
+async function addStudyResource(subject_, title_, description_, type_, url_) {
     let studyResource = {
         subject: subject_,
         title: title_,
         description: description_,
+        type: type_,
         url: url_
     }
     const {data, error} = await supabase.from('studyResources').insert(studyResource)
     if (error) {
         console.log("could not add resource", error)
+    }else{
+        return data;
     }
 }
 
@@ -83,7 +86,10 @@ async function login(username_, password_) {
 
 // Logout() function
 async function logout() {
-    
+    const { error } = await supabase.auth.signOut()
+    if(error) {
+        console.log(error)
+    } 
 }
 
 // Export functions to main.js
