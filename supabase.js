@@ -21,7 +21,6 @@ async function addStudyResource(subject_, title_, description_, type_, url_) {
         subject: subject_,
         title: title_,
         description: description_,
-        type: type_,
         url: url_
     }
     const {data, error} = await supabase.from('studyResources').insert(studyResource)
